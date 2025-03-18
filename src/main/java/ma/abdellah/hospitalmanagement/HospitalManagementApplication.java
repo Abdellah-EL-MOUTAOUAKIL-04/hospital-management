@@ -1,7 +1,10 @@
 package ma.abdellah.hospitalmanagement;
 
-import ma.abdellah.hospitalmanagement.entities.Patient;
+import ma.abdellah.hospitalmanagement.entities.*;
+import ma.abdellah.hospitalmanagement.repository.ConsultationRepository;
+import ma.abdellah.hospitalmanagement.repository.MedecinRepository;
 import ma.abdellah.hospitalmanagement.repository.PatientRepository;
+import ma.abdellah.hospitalmanagement.repository.RendezVousRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -10,14 +13,10 @@ import org.springframework.context.annotation.Bean;
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Stream;
 
 @SpringBootApplication
 public class HospitalManagementApplication {
-
-    private PatientRepository patientRepository;
-    public HospitalManagementApplication(PatientRepository patientRepository) {
-        this.patientRepository = patientRepository;
-    }
 
     public static void main(String[] args) {
         SpringApplication.run(HospitalManagementApplication.class, args);
@@ -55,5 +54,50 @@ public class HospitalManagementApplication {
     //        };
     //    }
 
+    //2nd version
+    @Bean
+    CommandLineRunner start(PatientRepository patientRepository,
+                            MedecinRepository medecinRepository,
+                            RendezVousRepository rendezVousRepository,
+                            ConsultationRepository consultationRepository) {
+        return args -> {
+            Stream.of("abdellah","zahra","ahmed").forEach(name -> {
+                Patient patient=new Patient();
+                patient.setNom(name);
+                patient.setDateNaissance(LocalDate.now());
+                patient.setMalade(false);
+                patient.setScore(100);
+                patientRepository.save(patient);
+            });
+
+            Stream.of("atmane","salah","omar").forEach(name -> {
+                Medecin medecin=new Medecin();
+                medecin.setNom(name);
+                medecin.setEmail("test@gmail.com");
+                medecin.setSpecialite("specialite X");
+                medecinRepository.save(medecin);
+            });
+
+            Patient patient=patientRepository.findById(1L).orElse(null);
+            patient=patientRepository.findByNom("abdellah");
+
+            Medecin medecin=medecinRepository.findByNom("salah");
+
+            RendezVous rendezVous=new RendezVous();
+            rendezVous.setDate(LocalDate.now());
+            rendezVous.setStatus(StatusRDV.PENDING);
+            rendezVous.setMedecin(medecin);
+            rendezVous.setPatient(patient);
+            rendezVousRepository.save(rendezVous);
+
+            RendezVous rdv=rendezVousRepository.findById(1L).orElse(null);
+            Consultation consultation=new Consultation();
+            consultation.setDateConsultation(LocalDate.now());
+            consultation.setRendezVous(rdv);
+            consultation.setRapport("r1");
+            consultationRepository.save(consultation);
+        };
+
+    }
 
 }
