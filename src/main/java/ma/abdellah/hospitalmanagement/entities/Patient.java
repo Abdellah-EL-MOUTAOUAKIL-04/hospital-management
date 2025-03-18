@@ -1,13 +1,11 @@
 package ma.abdellah.hospitalmanagement.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
+import java.util.Collection;
 
 @Entity(name = "patient")
 @NoArgsConstructor @AllArgsConstructor @Getter @Setter @Builder @ToString
@@ -19,4 +17,6 @@ public class Patient {
     private LocalDate dateNaissance;
     private boolean malade;
     private int score;
+    @OneToMany(mappedBy = "patient",fetch = FetchType.LAZY)
+    private Collection<RendezVous> rendezVous;
 }
