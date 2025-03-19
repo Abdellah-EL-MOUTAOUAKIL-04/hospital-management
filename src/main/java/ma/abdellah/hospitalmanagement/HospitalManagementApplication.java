@@ -5,6 +5,7 @@ import ma.abdellah.hospitalmanagement.repository.ConsultationRepository;
 import ma.abdellah.hospitalmanagement.repository.MedecinRepository;
 import ma.abdellah.hospitalmanagement.repository.PatientRepository;
 import ma.abdellah.hospitalmanagement.repository.RendezVousRepository;
+import ma.abdellah.hospitalmanagement.service.IHospitalService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -56,10 +57,10 @@ public class HospitalManagementApplication {
 
     //2nd version
     @Bean
-    CommandLineRunner start(PatientRepository patientRepository,
+    CommandLineRunner start(IHospitalService hospitalService,
+                            PatientRepository patientRepository,
                             MedecinRepository medecinRepository,
-                            RendezVousRepository rendezVousRepository,
-                            ConsultationRepository consultationRepository) {
+                            RendezVousRepository rendezVousRepository) {
         return args -> {
             Stream.of("abdellah","zahra","ahmed").forEach(name -> {
                 Patient patient=new Patient();
@@ -67,7 +68,7 @@ public class HospitalManagementApplication {
                 patient.setDateNaissance(LocalDate.now());
                 patient.setMalade(false);
                 patient.setScore(100);
-                patientRepository.save(patient);
+                hospitalService.savePatient(patient);
             });
 
             Stream.of("atmane","salah","omar").forEach(name -> {
@@ -75,7 +76,7 @@ public class HospitalManagementApplication {
                 medecin.setNom(name);
                 medecin.setEmail("test@gmail.com");
                 medecin.setSpecialite("specialite X");
-                medecinRepository.save(medecin);
+                hospitalService.saveMedecin(medecin);
             });
 
             Patient patient=patientRepository.findById(1L).orElse(null);
@@ -88,14 +89,14 @@ public class HospitalManagementApplication {
             rendezVous.setStatus(StatusRDV.PENDING);
             rendezVous.setMedecin(medecin);
             rendezVous.setPatient(patient);
-            rendezVousRepository.save(rendezVous);
+            hospitalService.saveRDV(rendezVous);
 
             RendezVous rdv=rendezVousRepository.findById(1L).orElse(null);
             Consultation consultation=new Consultation();
             consultation.setDateConsultation(LocalDate.now());
             consultation.setRendezVous(rdv);
             consultation.setRapport("r1");
-            consultationRepository.save(consultation);
+            hospitalService.saveConsultation(consultation);
         };
 
     }

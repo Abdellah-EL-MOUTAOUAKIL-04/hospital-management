@@ -1,5 +1,6 @@
 package ma.abdellah.hospitalmanagement.service;
 
+import jakarta.transaction.Transactional;
 import ma.abdellah.hospitalmanagement.entities.Consultation;
 import ma.abdellah.hospitalmanagement.entities.Medecin;
 import ma.abdellah.hospitalmanagement.entities.Patient;
@@ -8,7 +9,10 @@ import ma.abdellah.hospitalmanagement.repository.ConsultationRepository;
 import ma.abdellah.hospitalmanagement.repository.MedecinRepository;
 import ma.abdellah.hospitalmanagement.repository.PatientRepository;
 import ma.abdellah.hospitalmanagement.repository.RendezVousRepository;
+import org.springframework.stereotype.Service;
 
+@Service
+@Transactional
 public class HospitalServiceImpl implements IHospitalService {
     private PatientRepository patientRepository;
     private MedecinRepository medecinRepository;
