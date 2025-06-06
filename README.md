@@ -48,8 +48,8 @@ L'application est conçue pour offrir les fonctionnalités suivantes (basées su
 
 1.  Clonez le dépôt (si applicable, sinon assurez-vous d'avoir le code source) :
     ```bash
-    # git clone [URL_DU_DEPOT_GIT_SI_APPLICABLE]
-    # cd hospital-management
+    git clone https://github.com/Abdellah-EL-MOUTAOUAKIL-04/hospital-management.git
+    cd hospital-management
     ```
 2.  Configuration de la base de données :
     - Par défaut, l'application utilise la base de données H2 en mémoire. Aucune configuration supplémentaire n'est requise pour H2.
